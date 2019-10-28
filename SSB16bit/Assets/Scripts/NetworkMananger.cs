@@ -14,7 +14,6 @@ public class NetworkMananger : MonoBehaviour
     public Socket sock;
 
     public Text textUI;
-    public SocketLib socket;
     public PostBox postBox;
 
     private int count = 0;
@@ -32,13 +31,10 @@ public class NetworkMananger : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        var ep = new IPEndPoint(IPAddress.Parse("192.168.171.128"), 9190);
+        var ep = new IPEndPoint(IPAddress.Parse("211.46.116.181"), 9190);
         sock.Connect(ep);
-
-        socket = new SocketLib();
         postBox = PostBox.GetInstance;
         StartCoroutine(CheckQueue());
-        RequestData();
     }
 
     private void Start()
@@ -57,14 +53,25 @@ public class NetworkMananger : MonoBehaviour
         sock.Send(buff, SocketFlags.None);
     }
 
-    private void RequestData()
-    {
-        socket.Request();
-    }
-
     public void ResponseData(string data)
     {
         textUI.text = data;
+    }
+
+    public void Response(string result)
+    {
+        PostBox.GetInstance.PushData(result);
+    }
+
+    public IEnumerator ReciveToServer()
+    {
+        string result;
+        byte[] receiverBuff = new byte[8192];
+        int n = NetworkMananger.instance.sock.Receive(receiverBuff);
+        result = Encoding.UTF8.GetString(receiverBuff, 0, n);
+        Debug.Log("Server message : " + result);
+        Response(result);
+        yield return new WaitForSeconds(0.0f);
     }
 
     //큐를 주기적으로 탐색

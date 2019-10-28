@@ -526,4 +526,4 @@ ScriptsOnlyBuild:
   platform: 19
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
-  playerPath: "C:/Users/chief/OneDrive/\uBC14\uD0D5 \uD654\uBA74/MultPlayGame.exe"
+  playerPath: "C:/Users/chief/OneDrive/\uBC14\uD0D5 \uD654\uBA74/MultPlayGame_Data/MultPlayGame.exe"
