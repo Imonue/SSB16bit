@@ -164,12 +164,12 @@ public class Mario : MonoBehaviour
         if (bLeft)
         {
             NetworkMananger.instance.SendMessage("Mario Left Move");
-            StartCoroutine(NetworkMananger.instance.ReciveToServer());
+            //StartCoroutine(NetworkMananger.instance.ReciveToServer());
         }
         else
         {
             NetworkMananger.instance.SendMessage("Mario Right Move");
-            StartCoroutine(NetworkMananger.instance.ReciveToServer());
+           // StartCoroutine(NetworkMananger.instance.ReciveToServer());
         }
     }
 
@@ -184,7 +184,7 @@ public class Mario : MonoBehaviour
         {
             rigidBody2D.AddForce(new Vector2(0, jump));
             NetworkMananger.instance.SendMessage("Mario Left Jump");
-            StartCoroutine(NetworkMananger.instance.ReciveToServer());
+            //StartCoroutine(NetworkMananger.instance.ReciveToServer());
         }
     }
 
