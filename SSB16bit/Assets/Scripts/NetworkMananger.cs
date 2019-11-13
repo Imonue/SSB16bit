@@ -20,7 +20,8 @@ public class NetworkMananger : MonoBehaviour
     public Text textUI;
     public PostBox postBox;
 
-    private Thread thread;
+    private Thread readThread;
+    private Thread sendThread;
 
     private void Awake()
     {
@@ -39,8 +40,11 @@ public class NetworkMananger : MonoBehaviour
         //var ep = new IPEndPoint(IPAddress.Parse("192.168.171.130"), 9190);
         sock.Connect(ep);
 
-        thread = new Thread(ReciveToServer);
-        thread.Start();
+        readThread = new Thread(ReciveToServer);
+        readThread.Start();
+
+        //sendThread = new Thread(SendToServer);
+        //sendThread.Start();
 
         postBox = PostBox.GetInstance;
         StartCoroutine(CheckQueue());
@@ -79,31 +83,31 @@ public class NetworkMananger : MonoBehaviour
 
     public void SendMoveRightMessage()
     {
-        string message = "CHARACTERMOVERIGHT" + GameManager.instance.GetID();
+        string message = "CHARACTERMOVERIGHT" + GameManager.instance.GetID() + '&';
         SendMessage(message);
     }
 
     public void SendMoveLeftMessage()
     {
-        string message = "CHARACTERMOVELEFT" + GameManager.instance.GetID();
+        string message = "CHARACTERMOVELEFT" + GameManager.instance.GetID() + '&';
         SendMessage(message);
     }
 
     public void SendMoveUpMessage()
     {
-        string message = "CHARACTERMOVEUP" + GameManager.instance.GetID();
+        string message = "CHARACTERMOVEUP" + GameManager.instance.GetID() + '&';
         SendMessage(message);
     }
 
     public void SendMoveDownMessage()
     {
-        string message = "CHARACTERMOVEDOWN" + GameManager.instance.GetID();
+        string message = "CHARACTERMOVEDOWN" + GameManager.instance.GetID() + '&';
         SendMessage(message);
     }
 
     public void SendMoveStopMessage()
     {
-        string message = "CHARACTERMOVESTOP" + GameManager.instance.GetID();
+        string message = "CHARACTERMOVESTOP" + GameManager.instance.GetID() + '&';
         SendMessage(message);
     }
 
@@ -132,25 +136,31 @@ public class NetworkMananger : MonoBehaviour
             int n = NetworkMananger.instance.sock.Receive(receiverBuff);
             result = Encoding.UTF8.GetString(receiverBuff, 0, n);
 
-            Debug.Log("Server to : " + result);
+            if (result.Contains("&"))
+            {
+                string[] results = result.Split(new string[] { "&" }, StringSplitOptions.None);
 
-            Response(result);
+                for (int i = 0; i < results.Length; i++)
+                    Response(results[i]);
+            }
+            else
+            {
+                Response(result);
+            }
         }
     }
 
-    //public IEnumerator ReciveToServer()
-    //{
-    //    while (true)
-    //    {
-    //        string result;
-    //        byte[] receiverBuff = new byte[8192];
-    //        int n = NetworkMananger.instance.sock.Receive(receiverBuff);
-    //        result = Encoding.UTF8.GetString(receiverBuff, 0, n);
-    //        count++;
-    //        Response(result);
-    //        yield return new WaitForSeconds(0.0f);
-    //    }
-    //}
+    public void SendToServer()
+    {
+        while (true)
+        {
+            string sendData = PostBox.GetInstance.GetSendData();
+            if (sendData != string.Empty)
+            {
+                SendMessage(sendData);
+            }
+        }
+    }
 
     //큐를 주기적으로 탐색
     private IEnumerator CheckQueue()
@@ -172,6 +182,8 @@ public class NetworkMananger : MonoBehaviour
         }
     }
 
+    int count = 1;
+
     private void CheckMessage(string message)
     {
         if (message.Contains("LOGINSUCESS"))
@@ -180,35 +192,30 @@ public class NetworkMananger : MonoBehaviour
             Debug.Log("Login Sucess connect id is " + message); // 서버로부터 로그인 성공을 전달 받음
             GameManager.instance.SelectScene(message);
         }
+        else if (message.Contains("CHARACTERMOVESTOP"))
+        {
+            message = message.Replace("CHARACTERMOVESTOP", "");
+            GameManager.instance.ChracterMove(Vector3.zero, message);
+        }
         else if (message.Contains("CHARACTERMOVERIGHT"))
         {
             message = message.Replace("CHARACTERMOVERIGHT", "");
-            Debug.Log(message + " move right ");
             GameManager.instance.ChracterMove(Vector3.right, message);
         }
         else if (message.Contains("CHARACTERMOVELEFT"))
         {
             message = message.Replace("CHARACTERMOVELEFT", "");
-            Debug.Log(message + " move left ");
             GameManager.instance.ChracterMove(Vector3.left, message);
         }
         else if (message.Contains("CHARACTERMOVEUP"))
         {
             message = message.Replace("CHARACTERMOVEUP", "");
-            Debug.Log(message + " move up ");
             GameManager.instance.ChracterMove(Vector3.up, message);
         }
         else if (message.Contains("CHARACTERMOVEDOWN"))
         {
             message = message.Replace("CHARACTERMOVEDOWN", "");
-            Debug.Log(message + " move down ");
             GameManager.instance.ChracterMove(Vector3.down, message);
-        }
-        else if (message.Contains("CHARACTERMOVESTOP"))
-        {
-            message = message.Replace("CHARACTERMOVESTOP", "");
-            Debug.Log(message + " move down ");
-            GameManager.instance.ChracterMove(Vector3.zero, message);
         }
         else if (message.Contains("CHARACTERJUMP"))
         {
@@ -230,6 +237,6 @@ public class NetworkMananger : MonoBehaviour
     void OnApplicationQuit()
     {
         Debug.Log("프로그램 종료");
-        thread.Abort();
+        readThread.Abort();
     }
 }

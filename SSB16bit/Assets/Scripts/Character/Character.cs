@@ -5,6 +5,16 @@ using UnityEngine.SceneManagement;
 
 public class Character : MonoBehaviour
 {
+    public enum CharacterState
+    {
+        idle = 0,
+        move = 1,
+        dash = 2,
+        attack = 3,
+        interact = 4,
+        stagger = 5
+    }
+
     [Header("Component")]
     private Animator animator;
     private Rigidbody2D rigidbody;
@@ -25,6 +35,8 @@ public class Character : MonoBehaviour
     [SerializeField]
     private Vector3 direction;
     [SerializeField]
+    private Vector3 moveDirection;
+    [SerializeField]
     private bool isJump
     {
         get
@@ -34,51 +46,32 @@ public class Character : MonoBehaviour
         }
     }
     [SerializeField]
-    private bool isRun
+    private bool isMove
     {
         get
         {
-            return 0 != rigidbody.velocity.x;
+            return 0 != rigidbody.velocity.x && 0 != rigidbody.velocity.y;
         }
     }
+    [SerializeField]
+    private CharacterState currentState;
+
+    public Coroutine attackRoutine;
 
     protected virtual void Start()
     {
         this.animator = GetComponent<Animator>();
         this.rigidbody = GetComponent<Rigidbody2D>();
+        this.currentState = CharacterState.idle;
         Debug.Log("Character create active scene is " + SceneManager.GetActiveScene().name);
     }
 
 
     protected virtual void Update()
     {
-        //AnimationMovement();
-        if (userType)
-        {
-            if (Input.GetKey(KeyCode.RightArrow))
-            {
-                NetworkMananger.instance.SendMoveRightMessage();
-            }
-            else if (Input.GetKey(KeyCode.LeftArrow))
-            {
-                NetworkMananger.instance.SendMoveLeftMessage();
-            }
-            else if (Input.GetKey(KeyCode.UpArrow))
-            {
-                NetworkMananger.instance.SendMoveUpMessage();
-            }
-            else if (Input.GetKey(KeyCode.DownArrow))
-            {
-                NetworkMananger.instance.SendMoveDownMessage();
-            }
-            else
-            {
-                if (direction != Vector3.zero)
-                {
-                    NetworkMananger.instance.SendMoveStopMessage();
-                }
-            }
-        }
+        if (currentState == CharacterState.interact) return;
+        AnimationMovement();
+        GetInput();
     }
 
     private void FixedUpdate()
@@ -89,7 +82,7 @@ public class Character : MonoBehaviour
     public void Move()
     {
         //rigidbody.AddForce(new Vector2((bLeft ? -speed : speed), 0));
-        rigidbody.velocity = this.direction.normalized * speed * Time.fixedDeltaTime;
+        //rigidbody.velocity = this.direction.normalized * speed * Time.fixedDeltaTime;
     }
 
     public void Jump()
@@ -107,20 +100,104 @@ public class Character : MonoBehaviour
 
     public void AnimationMovement()
     {
-        if (isJump)
+        GetMoveDirection().Normalize();
+        SetMoveDirection(Mathf.Round(GetMoveDirection().x), Mathf.Round(GetMoveDirection().y), GetMoveDirection().z);
+        GetAnimator().SetFloat("DirY", GetMoveDirection().y);
+        GetAnimator().SetFloat("DirX", GetMoveDirection().x);
+    }
+
+    public void GetInput()
+    {
+        if (userType)
         {
-            animator.SetBool("Jump", true);
-        }
-        else if (isRun)
-        {
-            animator.SetBool("Run", true);
-        }
-        else
-        {
-            animator.SetBool("Run", false);
-            animator.SetBool("Jump", false);
+            if (Input.GetKey(KeyCode.RightArrow))
+            {
+                NetworkMananger.instance.SendMoveRightMessage();
+                this.transform.Translate(new Vector3(0.01f, 0, 0));
+                this.SetMoveDirection(Vector3.right);
+                this.GetAnimator().SetBool("Move", true);
+            }
+            if (Input.GetKeyUp(KeyCode.RightArrow))
+            {
+                NetworkMananger.instance.SendMoveStopMessage();
+                //this.SetDirection(Vector3.zero);
+                this.GetAnimator().SetBool("Move", false);
+            }
+
+            if (Input.GetKey(KeyCode.LeftArrow))
+            {
+                NetworkMananger.instance.SendMoveLeftMessage();
+                this.transform.Translate(new Vector3(-0.01f, 0, 0));
+                this.SetMoveDirection(Vector3.left);
+                this.GetAnimator().SetBool("Move", true);
+            }
+            if (Input.GetKeyUp(KeyCode.LeftArrow))
+            {
+                NetworkMananger.instance.SendMoveStopMessage();
+                this.SetDirection(Vector3.zero);
+                this.GetAnimator().SetBool("Move", false);
+            }
+
+            if (Input.GetKey(KeyCode.UpArrow))
+            {
+                NetworkMananger.instance.SendMoveUpMessage();
+                this.transform.Translate(new Vector3(0, 0.01f, 0));
+                this.SetMoveDirection(Vector3.up);
+                this.GetAnimator().SetBool("Move", true);
+            }
+            if (Input.GetKeyUp(KeyCode.UpArrow))
+            {
+                NetworkMananger.instance.SendMoveStopMessage();
+                this.SetDirection(Vector3.zero);
+                this.GetAnimator().SetBool("Move", false);
+            }
+
+            if (Input.GetKey(KeyCode.DownArrow))
+            {
+                NetworkMananger.instance.SendMoveDownMessage();
+                this.transform.Translate(new Vector3(0, -0.01f, 0));
+                this.SetMoveDirection(Vector3.down);
+                this.GetAnimator().SetBool("Move", true);
+            }
+            if (Input.GetKeyUp(KeyCode.DownArrow))
+            {
+                NetworkMananger.instance.SendMoveStopMessage();
+                this.SetDirection(Vector3.zero);
+                this.GetAnimator().SetBool("Move", false);
+            }
         }
 
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            CharacterAttack();
+        }
+    }
+
+
+    public void CharacterAttack()
+    {
+        attackRoutine = StartCoroutine(Attack());
+    }
+
+
+    private IEnumerator Attack()
+    {
+        currentState = CharacterState.attack;
+        GetAnimator().SetBool("Attack", true);
+        SetDirection(Vector3.zero);
+        rigidbody.velocity = GetDirection().normalized * speed * Time.deltaTime;
+        yield return new WaitForSeconds(0.05f);
+        StopAttack();
+    }
+
+    public void StopAttack()
+    {
+        if (attackRoutine != null)
+        {
+            StopCoroutine(attackRoutine);
+            currentState = CharacterState.idle;
+            animator.SetBool("Attack", false);
+        }
     }
 
     ////////////////////////////// Getter/Setter //////////////////////////////
@@ -173,5 +250,30 @@ public class Character : MonoBehaviour
     public Vector3 GetDirection()
     {
         return this.direction;
+    }
+
+    public void SetMoveDirection(float x, float y, float z)
+    {
+        this.moveDirection = new Vector3(x, y, z);
+    }
+
+    public void SetMoveDirection(Vector3 moveDirection)
+    {
+        this.moveDirection = moveDirection;
+    }
+
+    public Vector3 GetMoveDirection()
+    {
+        return this.moveDirection;
+    }
+
+    public void SetCurrentState(CharacterState currentState)
+    {
+        this.currentState = currentState;
+    }
+
+    public CharacterState GetCurrentState()
+    {
+        return this.currentState;
     }
 }

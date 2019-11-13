@@ -58,14 +58,36 @@ public class GameManager : MonoBehaviour
             StartCoroutine(AnotherCharcterCreate(ID, characterID));
         }
     }
-    
+
     public void ChracterMove(Vector3 direction, string userID)
-    { 
-        for(int i = 0; i < characters.Count; i++)
+    {
+        if (!userID.Equals(this.ID))
         {
-            if (characters[i].GetUserID().Equals(userID))
+            if (direction != Vector3.zero)
             {
-                this.characters[i].SetDirection(direction);
+                for (int i = 0; i < characters.Count; i++)
+                {
+                    if (characters[i].GetUserID().Equals(userID))
+                    {
+                        this.characters[i].transform.Translate(direction/100);
+                        this.characters[i].SetMoveDirection(direction);
+                        this.characters[i].GetAnimator().SetBool("Move", true);
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < characters.Count; i++)
+                {
+                    if (characters[i].GetUserID().Equals(userID))
+                    {
+                        Debug.Log(userID);
+                        this.characters[i].GetAnimator().SetBool("Move", false);
+                        break;
+                    }
+                }
+
             }
         }
     }
@@ -84,16 +106,20 @@ public class GameManager : MonoBehaviour
     IEnumerator CharacterCreate(string characterID)
     {
         yield return characterCreateTime;
+        Debug.Log("character : " + characterID);
         int characID = 0 ;
         if (characterID.Equals("mario"))
         {
             characID = 0;
         }
+        else if (characterID.Equals("link"))
+        {
+            characID = 1;
+        }
         else
         {
             Debug.Log("EEROR!! Check for character Id!!!");
         }
-        int.TryParse(characterID, out characID);
         Character character = Instantiate(CharacterManager.instance.characterObjs[characID], new Vector2(0, 0), Quaternion.identity).GetComponent<Character>();
         character.SetUserID(this.ID);
         character.SetUserType(true);
@@ -107,6 +133,10 @@ public class GameManager : MonoBehaviour
         if (characterID.Equals("mario"))
         {
             characID = 0;
+        }
+        else if (characterID.Equals("link"))
+        {
+            characID = 1;
         }
         else
         {
