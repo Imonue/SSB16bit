@@ -165,11 +165,11 @@ public class Character : MonoBehaviour
                 this.SetDirection(Vector3.zero);
                 this.GetAnimator().SetBool("Move", false);
             }
-        }
 
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            CharacterAttack();
+            if (Input.GetKeyDown(KeyCode.Z))
+            {
+                CharacterAttack();
+            }
         }
     }
 
