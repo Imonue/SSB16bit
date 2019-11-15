@@ -22,8 +22,12 @@ public class Character : MonoBehaviour
     [Header("Infomation")]
     [SerializeField]
     private string userID;
+    [SerializeField]
+    private int HP = 100;
 
     [Header("Stat")]
+    [SerializeField]
+    private float atk = 10.0f;
     [SerializeField]
     private float speed = 10.0f;
     [SerializeField]
@@ -55,6 +59,16 @@ public class Character : MonoBehaviour
     }
     [SerializeField]
     private CharacterState currentState;
+
+    [Header("Attack")]
+    [SerializeField]
+    private GameObject atkUp;
+    [SerializeField]
+    private GameObject atkDown;
+    [SerializeField]
+    private GameObject atkRight;
+    [SerializeField]
+    private GameObject atkLeft;
 
     public Coroutine attackRoutine;
 
@@ -168,6 +182,7 @@ public class Character : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Z))
             {
+                NetworkMananger.instance.SendAttackMessage();
                 CharacterAttack();
             }
         }
@@ -198,6 +213,25 @@ public class Character : MonoBehaviour
             currentState = CharacterState.idle;
             animator.SetBool("Attack", false);
         }
+    }
+
+    public void SetTag(string Tag)
+    {
+        this.transform.gameObject.tag = Tag;
+        this.atkUp.tag = Tag;
+        this.atkDown.tag = Tag;
+        this.atkRight.tag = Tag;
+        this.atkLeft.tag = Tag;
+    }
+
+    public void TakeDamage(int damage)
+    {
+        this.HP = this.HP - damage;
+    }
+
+    public void TakeDamage(float damage)
+    {
+        this.HP = this.HP - (int)damage;
     }
 
     ////////////////////////////// Getter/Setter //////////////////////////////
@@ -275,5 +309,25 @@ public class Character : MonoBehaviour
     public CharacterState GetCurrentState()
     {
         return this.currentState;
+    }
+
+    public void SetHP(int HP)
+    {
+        this.HP = HP;
+    }
+
+    public int GetHP()
+    {
+        return this.HP;
+    }
+
+    public void SetATK(float atk)
+    {
+        this.atk = atk;
+    }
+
+    public float GetATK()
+    {
+        return this.atk;
     }
 }

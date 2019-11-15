@@ -4,6 +4,7 @@ ScriptsOnlyBuild:
     - Character
     - CharacterManager
     - GameManager
+    - HitBox
     - LoginManager
     - MessageBox
     - NetworkMananger
@@ -50,7 +51,7 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 50
       Script: {instanceID: 0}
-    - Class: 58
+    - Class: 60
       Script: {instanceID: 0}
     - Class: 61
       Script: {instanceID: 0}
@@ -94,6 +95,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 11404}
     - Class: 114
       Script: {instanceID: 11510}
+    - Class: 114
+      Script: {instanceID: 21394}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -177,30 +180,16 @@ ScriptsOnlyBuild:
     - Class: 104
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 9674}
-    - Class: 114
-      Script: {instanceID: 9838}
-    - Class: 114
       Script: {instanceID: 10286}
-    - Class: 114
-      Script: {instanceID: 11136}
     - Class: 114
       Script: {instanceID: 11510}
     - Class: 115
-      Script: {instanceID: 0}
-    - Class: 128
       Script: {instanceID: 0}
     - Class: 157
       Script: {instanceID: 0}
     - Class: 212
       Script: {instanceID: 0}
     - Class: 213
-      Script: {instanceID: 0}
-    - Class: 222
-      Script: {instanceID: 0}
-    - Class: 223
-      Script: {instanceID: 0}
-    - Class: 224
       Script: {instanceID: 0}
   scriptHashData:
   - hash:
@@ -337,7 +326,7 @@ ScriptsOnlyBuild:
     className: PhysicsRaycaster
   - hash:
       serializedVersion: 2
-      Hash: 1cae58792217f2c76953f1a4278de1fe
+      Hash: e05f3616e0404a3f142f4f9f63260fbc
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Character
@@ -677,6 +666,18 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
     className: PlayableTrack
+  - hash:
+      serializedVersion: 2
+      Hash: 1028c39545bcfa841aaab54121e69a47
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: LoadingManager
+  - hash:
+      serializedVersion: 2
+      Hash: 3f07eb6e17682325cfd6c76f0de3ae08
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: HitBox
   platform: 19
   scenePathNames:
   - Assets/Scenes/LoginScene.unity

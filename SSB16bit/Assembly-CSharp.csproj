@@ -65,10 +65,12 @@
     <Compile Include="Assets\Scripts\BaseState.cs" />
     <Compile Include="Assets\Scripts\BaseStateMachine.cs" />
     <Compile Include="Assets\Scripts\Character\Character.cs" />
+    <Compile Include="Assets\Scripts\Character\HitBox.cs" />
     <Compile Include="Assets\Scripts\Character\Mario.cs" />
     <Compile Include="Assets\Scripts\Example.cs" />
     <Compile Include="Assets\Scripts\Manager\CharacterManager.cs" />
     <Compile Include="Assets\Scripts\Manager\GameManager.cs" />
+    <Compile Include="Assets\Scripts\Manager\LoadingManager.cs" />
     <Compile Include="Assets\Scripts\Manager\LoginManager.cs" />
     <Compile Include="Assets\Scripts\Manager\SelectManager.cs" />
     <Compile Include="Assets\Scripts\NetworkMananger.cs" />

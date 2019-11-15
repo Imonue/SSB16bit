@@ -117,6 +117,12 @@ public class NetworkMananger : MonoBehaviour
         SendMessage(message);
     }
 
+    public void SendAttackMessage()
+    {
+        string message = "CHARACTERATTACK" + GameManager.instance.GetID();
+        SendMessage(message);
+    }
+
     public void ResponseData(string data)
     {
         //textUI.text = data;
@@ -221,6 +227,11 @@ public class NetworkMananger : MonoBehaviour
         {
             string id = message.Replace("CHARACTERJUMP", "");
             GameManager.instance.CharacterJump(id);
+        }
+        else if (message.Contains("CHARACTERATTACK"))
+        {
+            string id = message.Replace("CHARACTERATTACK", "");
+            GameManager.instance.CharacterAttack(id);
         }
         else if (message.Contains("SELECTCHARACTER"))
         {

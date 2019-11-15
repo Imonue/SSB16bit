@@ -103,6 +103,20 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void CharacterAttack(string userID)
+    {
+        if (!userID.Equals(this.ID))
+        {
+            for (int i = 0; i < characters.Count; i++)
+            {
+                if (characters[i].GetUserID().Equals(userID))
+                {
+                    this.characters[i].CharacterAttack();
+                }
+            }
+        }
+    }
+
     IEnumerator CharacterCreate(string characterID)
     {
         yield return characterCreateTime;
@@ -123,6 +137,7 @@ public class GameManager : MonoBehaviour
         Character character = Instantiate(CharacterManager.instance.characterObjs[characID], new Vector2(0, 0), Quaternion.identity).GetComponent<Character>();
         character.SetUserID(this.ID);
         character.SetUserType(true);
+        character.SetTag("Player");
         this.characters.Add(character);
     }
 
@@ -145,6 +160,7 @@ public class GameManager : MonoBehaviour
         Character character = Instantiate(CharacterManager.instance.characterObjs[characID], new Vector2(0, 0), Quaternion.identity).GetComponent<Character>();
         character.SetUserID(ID);
         character.SetUserType(false);
+        character.SetTag("AnotherPlayer");
         this.characters.Add(character);
     }
 
