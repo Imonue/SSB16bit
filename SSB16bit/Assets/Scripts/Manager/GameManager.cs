@@ -134,10 +134,11 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("EEROR!! Check for character Id!!!");
         }
-        Character character = Instantiate(CharacterManager.instance.characterObjs[characID], new Vector2(0, 0), Quaternion.identity).GetComponent<Character>();
+        Character character = Instantiate(CharacterManager.instance.characters[characID].gameObj, new Vector2(0, 0), Quaternion.identity).GetComponent<Character>();
         character.SetUserID(this.ID);
         character.SetUserType(true);
         character.SetTag("Player");
+        UIManager.instance.SetUser(CharacterManager.instance.characters[characID].hp);
         this.characters.Add(character);
     }
 
@@ -157,10 +158,11 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("EEROR!! Check for character Id!!!");
         }
-        Character character = Instantiate(CharacterManager.instance.characterObjs[characID], new Vector2(0, 0), Quaternion.identity).GetComponent<Character>();
+        Character character = Instantiate(CharacterManager.instance.characters[characID].gameObj, new Vector2(0, 0), Quaternion.identity).GetComponent<Character>();
         character.SetUserID(ID);
         character.SetUserType(false);
         character.SetTag("AnotherPlayer");
+        UIManager.instance.SetAUser(CharacterManager.instance.characters[characID].hp);
         this.characters.Add(character);
     }
 

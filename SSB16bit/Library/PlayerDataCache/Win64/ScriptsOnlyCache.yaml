@@ -9,6 +9,7 @@ ScriptsOnlyBuild:
     - MessageBox
     - NetworkMananger
     - SelectManager
+    - UIManager
     Unity.2D.Tilemap.Editor.dll:
     - UnityEditor.Tilemaps.GridPaintingState
     - UnityEditor.Tilemaps.GridPaletteBrushes
@@ -18,10 +19,8 @@ ScriptsOnlyBuild:
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
     - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
-    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
     - UnityEditor.Graphs.AnimationStateMachine.Graph
     - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
-    - UnityEditor.Graphs.AnimationStateMachine.StateNode
     - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
@@ -34,6 +33,7 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.GraphicRaycaster
     - UnityEngine.UI.Image
     - UnityEngine.UI.InputField
+    - UnityEngine.UI.Slider
     - UnityEngine.UI.Text
   sceneClasses:
     Assets/Scenes/LoginScene.unity:
@@ -78,25 +78,29 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 10020}
     - Class: 114
-      Script: {instanceID: 10286}
+      Script: {instanceID: 10218}
     - Class: 114
-      Script: {instanceID: 10370}
+      Script: {instanceID: 10288}
     - Class: 114
-      Script: {instanceID: 10478}
+      Script: {instanceID: 10372}
     - Class: 114
-      Script: {instanceID: 10660}
+      Script: {instanceID: 10480}
     - Class: 114
-      Script: {instanceID: 10852}
+      Script: {instanceID: 10664}
     - Class: 114
-      Script: {instanceID: 10876}
+      Script: {instanceID: 10856}
     - Class: 114
-      Script: {instanceID: 11136}
+      Script: {instanceID: 10880}
     - Class: 114
-      Script: {instanceID: 11404}
+      Script: {instanceID: 11140}
     - Class: 114
-      Script: {instanceID: 11510}
+      Script: {instanceID: 11408}
     - Class: 114
-      Script: {instanceID: 21394}
+      Script: {instanceID: 11514}
+    - Class: 114
+      Script: {instanceID: 11548}
+    - Class: 114
+      Script: {instanceID: 17678}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -139,13 +143,13 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 9880}
     - Class: 114
-      Script: {instanceID: 10286}
+      Script: {instanceID: 10288}
     - Class: 114
-      Script: {instanceID: 10660}
+      Script: {instanceID: 10664}
     - Class: 114
-      Script: {instanceID: 11136}
+      Script: {instanceID: 11140}
     - Class: 114
-      Script: {instanceID: 11510}
+      Script: {instanceID: 11514}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -180,9 +184,13 @@ ScriptsOnlyBuild:
     - Class: 104
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 10286}
+      Script: {instanceID: 9674}
     - Class: 114
-      Script: {instanceID: 11510}
+      Script: {instanceID: 10288}
+    - Class: 114
+      Script: {instanceID: 11140}
+    - Class: 114
+      Script: {instanceID: 11514}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 157
@@ -190,6 +198,10 @@ ScriptsOnlyBuild:
     - Class: 212
       Script: {instanceID: 0}
     - Class: 213
+      Script: {instanceID: 0}
+    - Class: 223
+      Script: {instanceID: 0}
+    - Class: 224
       Script: {instanceID: 0}
   scriptHashData:
   - hash:
@@ -374,6 +386,12 @@ ScriptsOnlyBuild:
     className: Shadow
   - hash:
       serializedVersion: 2
+      Hash: 3f07eb6e17682325cfd6c76f0de3ae08
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: HitBox
+  - hash:
+      serializedVersion: 2
       Hash: cc4274b586df3c02688bac01b88bd16c
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.EventSystems
@@ -434,6 +452,12 @@ ScriptsOnlyBuild:
     className: NetworkMananger
   - hash:
       serializedVersion: 2
+      Hash: 1028c39545bcfa841aaab54121e69a47
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: LoadingManager
+  - hash:
+      serializedVersion: 2
       Hash: c3d3430df9e3ea95e3e3d587961390fb
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
@@ -488,7 +512,7 @@ ScriptsOnlyBuild:
     className: SignalReceiver
   - hash:
       serializedVersion: 2
-      Hash: a70966bd10802b7772dabb0ac3c3488a
+      Hash: 479a738fd81bac3f37af91c1e4378d5d
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: CharacterManager
@@ -668,16 +692,10 @@ ScriptsOnlyBuild:
     className: PlayableTrack
   - hash:
       serializedVersion: 2
-      Hash: 1028c39545bcfa841aaab54121e69a47
+      Hash: 607adb5175ffaef25535a91732b82cec
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
-    className: LoadingManager
-  - hash:
-      serializedVersion: 2
-      Hash: 3f07eb6e17682325cfd6c76f0de3ae08
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: HitBox
+    className: UIManager
   platform: 19
   scenePathNames:
   - Assets/Scenes/LoginScene.unity

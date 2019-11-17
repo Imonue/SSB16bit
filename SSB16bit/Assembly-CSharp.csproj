@@ -73,6 +73,7 @@
     <Compile Include="Assets\Scripts\Manager\LoadingManager.cs" />
     <Compile Include="Assets\Scripts\Manager\LoginManager.cs" />
     <Compile Include="Assets\Scripts\Manager\SelectManager.cs" />
+    <Compile Include="Assets\Scripts\Manager\UIManager.cs" />
     <Compile Include="Assets\Scripts\NetworkMananger.cs" />
     <Compile Include="Assets\Scripts\PostBox.cs" />
     <Compile Include="Assets\Scripts\SocketLib.cs" />
