@@ -9,12 +9,17 @@ public class GameManager : MonoBehaviour
 
     [Header("User infomation")]
     [SerializeField]
-    private string ID;
+    private string userID;
     [SerializeField]
-    private List<Character> characters = new List<Character>();
+    private string auserID;
+    public Character auc;
+    public Character character;
 
     [Header("Game Manager Value")]
+    [SerializeField]
+    private bool gameStart = false;
     private WaitForSeconds characterCreateTime = new WaitForSeconds(1.0f);
+
 
     private void Awake()
     {
@@ -41,14 +46,14 @@ public class GameManager : MonoBehaviour
 
     public void SelectScene(string ID)
     {
-        this.ID = ID;
+        this.userID = ID;
         SceneManager.LoadScene("SelectScene");
     }
 
     public void LinkWorld(string ID, string characterID)
     {
 
-        if (this.ID.Equals(ID))
+        if (this.userID.Equals(ID))
         {
             SceneManager.LoadScene("WorldScene");
             StartCoroutine(CharacterCreate(characterID));
@@ -59,62 +64,23 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void ChracterMove(Vector3 direction, string userID)
+    public void ChracterMove(Vector3 direction)
     {
-        if (!userID.Equals(this.ID))
+        if (direction != Vector3.zero)
         {
-            if (direction != Vector3.zero)
-            {
-                for (int i = 0; i < characters.Count; i++)
-                {
-                    if (characters[i].GetUserID().Equals(userID))
-                    {
-                        this.characters[i].transform.Translate(direction/100);
-                        this.characters[i].SetMoveDirection(direction);
-                        this.characters[i].GetAnimator().SetBool("Move", true);
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                for (int i = 0; i < characters.Count; i++)
-                {
-                    if (characters[i].GetUserID().Equals(userID))
-                    {
-                        Debug.Log(userID);
-                        this.characters[i].GetAnimator().SetBool("Move", false);
-                        break;
-                    }
-                }
-
-            }
+            this.auc.transform.Translate(direction);
+            this.auc.SetMoveDirection(direction);
+            this.auc.GetAnimator().SetBool("Move", true);
         }
-    }
-
-    public void CharacterJump(string userID)
-    {
-        for (int i = 0; i < characters.Count; i++)
+        else
         {
-            if (characters[i].GetUserID().Equals(userID))
-            {
-                this.characters[i].Jump();
-            }
+            this.auc.GetAnimator().SetBool("Move", false);
         }
     }
 
     public void CharacterAttack(string userID)
     {
-        if (!userID.Equals(this.ID))
-        {
-            for (int i = 0; i < characters.Count; i++)
-            {
-                if (characters[i].GetUserID().Equals(userID))
-                {
-                    this.characters[i].CharacterAttack();
-                }
-            }
-        }
+        auc.CharacterAttack();
     }
 
     IEnumerator CharacterCreate(string characterID)
@@ -134,17 +100,18 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("EEROR!! Check for character Id!!!");
         }
-        Character character = Instantiate(CharacterManager.instance.characters[characID].gameObj, new Vector2(0, 0), Quaternion.identity).GetComponent<Character>();
-        character.SetUserID(this.ID);
-        character.SetUserType(true);
-        character.SetTag("Player");
-        UIManager.instance.SetUser(CharacterManager.instance.characters[characID].hp);
-        this.characters.Add(character);
+        this.character = Instantiate(CharacterManager.instance.characters[characID].gameObj, new Vector2(0, 0), Quaternion.identity).GetComponent<Character>();
+        this.character.SetUserID(this.userID);
+        this.character.SetUserType(true);
+        this.character.SetTag("Player");
+        this.character.SetHS(UIManager.instance.GetUHS());
+       // UIManager.instance.SetUser(CharacterManager.instance.characters[characID].hp);
     }
 
     IEnumerator AnotherCharcterCreate(string ID, string characterID)
     {
         yield return characterCreateTime;
+        this.gameStart = true;
         int characID = 0;
         if (characterID.Equals("mario"))
         {
@@ -158,23 +125,24 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("EEROR!! Check for character Id!!!");
         }
-        Character character = Instantiate(CharacterManager.instance.characters[characID].gameObj, new Vector2(0, 0), Quaternion.identity).GetComponent<Character>();
-        character.SetUserID(ID);
-        character.SetUserType(false);
-        character.SetTag("AnotherPlayer");
-        UIManager.instance.SetAUser(CharacterManager.instance.characters[characID].hp);
-        this.characters.Add(character);
+        this.auserID = ID;
+        this.auc = Instantiate(CharacterManager.instance.characters[characID].gameObj, new Vector2(0, 0), Quaternion.identity).GetComponent<Character>();
+        this.auc.SetUserID(ID);
+        this.auc.SetUserType(false);
+        this.auc.SetTag("AnotherPlayer");
+        this.auc.SetHS(UIManager.instance.GetAUHS());
+       // UIManager.instance.SetAUser(CharacterManager.instance.characters[characID].hp);
     }
 
     ////////////////////////////// Getter/Setter //////////////////////////////
 
     public void SetID(string ID)
     {
-        this.ID = ID;
+        this.userID = ID;
     }
 
     public string GetID()
     {
-        return this.ID;
+        return this.userID;
     }
 }

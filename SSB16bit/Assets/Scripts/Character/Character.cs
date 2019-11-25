@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Character : MonoBehaviour
 {
@@ -24,6 +25,7 @@ public class Character : MonoBehaviour
     private string userID;
     [SerializeField]
     private int HP = 100;
+    private int maxHP = 100;
 
     [Header("Stat")]
     [SerializeField]
@@ -72,6 +74,10 @@ public class Character : MonoBehaviour
 
     public Coroutine attackRoutine;
 
+    [Header("UI")]
+    [SerializeField]
+    private Slider hpSlider;
+
     protected virtual void Start()
     {
         this.animator = GetComponent<Animator>();
@@ -84,6 +90,12 @@ public class Character : MonoBehaviour
     protected virtual void Update()
     {
         if (currentState == CharacterState.interact) return;
+
+        if (hpSlider != null)
+        {
+            hpSlider.value = (float)HP / (float)maxHP;
+        }
+
         AnimationMovement();
         GetInput();
     }
@@ -120,6 +132,8 @@ public class Character : MonoBehaviour
         GetAnimator().SetFloat("DirX", GetMoveDirection().x);
     }
 
+    int count = 0;
+
     public void GetInput()
     {
         if (userType)
@@ -131,53 +145,26 @@ public class Character : MonoBehaviour
                 this.SetMoveDirection(Vector3.right);
                 this.GetAnimator().SetBool("Move", true);
             }
-            if (Input.GetKeyUp(KeyCode.RightArrow))
-            {
-                NetworkMananger.instance.SendMoveStopMessage();
-                //this.SetDirection(Vector3.zero);
-                this.GetAnimator().SetBool("Move", false);
-            }
-
-            if (Input.GetKey(KeyCode.LeftArrow))
+            else if(Input.GetKey(KeyCode.LeftArrow))
             {
                 NetworkMananger.instance.SendMoveLeftMessage();
                 this.transform.Translate(new Vector3(-0.01f, 0, 0));
                 this.SetMoveDirection(Vector3.left);
                 this.GetAnimator().SetBool("Move", true);
             }
-            if (Input.GetKeyUp(KeyCode.LeftArrow))
-            {
-                NetworkMananger.instance.SendMoveStopMessage();
-                this.SetDirection(Vector3.zero);
-                this.GetAnimator().SetBool("Move", false);
-            }
-
-            if (Input.GetKey(KeyCode.UpArrow))
+            else if (Input.GetKey(KeyCode.UpArrow))
             {
                 NetworkMananger.instance.SendMoveUpMessage();
                 this.transform.Translate(new Vector3(0, 0.01f, 0));
                 this.SetMoveDirection(Vector3.up);
                 this.GetAnimator().SetBool("Move", true);
             }
-            if (Input.GetKeyUp(KeyCode.UpArrow))
-            {
-                NetworkMananger.instance.SendMoveStopMessage();
-                this.SetDirection(Vector3.zero);
-                this.GetAnimator().SetBool("Move", false);
-            }
-
-            if (Input.GetKey(KeyCode.DownArrow))
+            else if (Input.GetKey(KeyCode.DownArrow))
             {
                 NetworkMananger.instance.SendMoveDownMessage();
                 this.transform.Translate(new Vector3(0, -0.01f, 0));
                 this.SetMoveDirection(Vector3.down);
                 this.GetAnimator().SetBool("Move", true);
-            }
-            if (Input.GetKeyUp(KeyCode.DownArrow))
-            {
-                NetworkMananger.instance.SendMoveStopMessage();
-                this.SetDirection(Vector3.zero);
-                this.GetAnimator().SetBool("Move", false);
             }
 
             if (Input.GetKeyDown(KeyCode.Z))
@@ -329,5 +316,15 @@ public class Character : MonoBehaviour
     public float GetATK()
     {
         return this.atk;
+    }
+
+    public void SetHS(Slider hpSlider)
+    {
+        this.hpSlider = hpSlider;
+    }
+
+    public Slider GetHS()
+    {
+        return this.hpSlider;
     }
 }

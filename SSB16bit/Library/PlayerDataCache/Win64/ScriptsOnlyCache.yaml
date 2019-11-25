@@ -68,39 +68,39 @@ ScriptsOnlyBuild:
     - Class: 111
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 9674}
+      Script: {instanceID: 9676}
     - Class: 114
-      Script: {instanceID: 9838}
+      Script: {instanceID: 9840}
     - Class: 114
-      Script: {instanceID: 9880}
+      Script: {instanceID: 9882}
     - Class: 114
-      Script: {instanceID: 9990}
+      Script: {instanceID: 9992}
     - Class: 114
-      Script: {instanceID: 10020}
+      Script: {instanceID: 10022}
     - Class: 114
-      Script: {instanceID: 10218}
+      Script: {instanceID: 10220}
     - Class: 114
-      Script: {instanceID: 10288}
+      Script: {instanceID: 10290}
     - Class: 114
-      Script: {instanceID: 10372}
+      Script: {instanceID: 10374}
     - Class: 114
-      Script: {instanceID: 10480}
+      Script: {instanceID: 10482}
     - Class: 114
-      Script: {instanceID: 10664}
+      Script: {instanceID: 10666}
     - Class: 114
-      Script: {instanceID: 10856}
+      Script: {instanceID: 10748}
     - Class: 114
-      Script: {instanceID: 10880}
+      Script: {instanceID: 10860}
     - Class: 114
-      Script: {instanceID: 11140}
+      Script: {instanceID: 10884}
     - Class: 114
-      Script: {instanceID: 11408}
+      Script: {instanceID: 11144}
     - Class: 114
-      Script: {instanceID: 11514}
+      Script: {instanceID: 11412}
     - Class: 114
-      Script: {instanceID: 11548}
+      Script: {instanceID: 11518}
     - Class: 114
-      Script: {instanceID: 17678}
+      Script: {instanceID: 11552}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -135,21 +135,21 @@ ScriptsOnlyBuild:
     - Class: 104
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 9674}
+      Script: {instanceID: 9676}
     - Class: 114
-      Script: {instanceID: 9758}
+      Script: {instanceID: 9760}
     - Class: 114
-      Script: {instanceID: 9838}
+      Script: {instanceID: 9840}
     - Class: 114
-      Script: {instanceID: 9880}
+      Script: {instanceID: 9882}
     - Class: 114
-      Script: {instanceID: 10288}
+      Script: {instanceID: 10290}
     - Class: 114
-      Script: {instanceID: 10664}
+      Script: {instanceID: 10666}
     - Class: 114
-      Script: {instanceID: 11140}
+      Script: {instanceID: 11144}
     - Class: 114
-      Script: {instanceID: 11514}
+      Script: {instanceID: 11518}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -184,13 +184,13 @@ ScriptsOnlyBuild:
     - Class: 104
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 9674}
+      Script: {instanceID: 9676}
     - Class: 114
-      Script: {instanceID: 10288}
+      Script: {instanceID: 10290}
     - Class: 114
-      Script: {instanceID: 11140}
+      Script: {instanceID: 11144}
     - Class: 114
-      Script: {instanceID: 11514}
+      Script: {instanceID: 11518}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 157
@@ -338,7 +338,7 @@ ScriptsOnlyBuild:
     className: PhysicsRaycaster
   - hash:
       serializedVersion: 2
-      Hash: e05f3616e0404a3f142f4f9f63260fbc
+      Hash: 943239e8b19f32256721010b6a97b5cf
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Character
@@ -494,6 +494,12 @@ ScriptsOnlyBuild:
     className: RawImage
   - hash:
       serializedVersion: 2
+      Hash: 66a2304b6f72c2d64219392d9161a51e
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: UIManager
+  - hash:
+      serializedVersion: 2
       Hash: 5ad4aa237d47ac2bab17bacb672edf7a
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.UI
@@ -596,7 +602,7 @@ ScriptsOnlyBuild:
     className: TMP_StyleSheet
   - hash:
       serializedVersion: 2
-      Hash: 43820f3a03b687580819e99b5c306b8b
+      Hash: a22f4ac710b09122e802bec1cedf644f
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: GameManager
@@ -690,12 +696,6 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
     className: PlayableTrack
-  - hash:
-      serializedVersion: 2
-      Hash: 607adb5175ffaef25535a91732b82cec
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: UIManager
   platform: 19
   scenePathNames:
   - Assets/Scenes/LoginScene.unity

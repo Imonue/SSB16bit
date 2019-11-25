@@ -12,12 +12,19 @@ public class UIManager : MonoBehaviour
     private GameObject userHP;
     [SerializeField]
     private Image userChaImg;
+    [SerializeField]
+    private Slider uhs;
 
     [Header("Another User HP Bar")]
     [SerializeField]
     private GameObject auserHP;
     [SerializeField]
     private Image auserChaImg;
+    [SerializeField]
+    private Slider auhs;
+
+    public Text aupx;
+    public Text aupy;
 
     private void Awake()
     {
@@ -42,7 +49,11 @@ public class UIManager : MonoBehaviour
 
     void Update()
     {
-        
+        if(GameManager.instance.character != null)
+        {
+            aupx.text = GameManager.instance.character.transform.position.x.ToString();
+            aupy.text = GameManager.instance.character.transform.position.y.ToString();
+        }
     }
 
     public void SetUser(Sprite characterImage)
@@ -55,5 +66,25 @@ public class UIManager : MonoBehaviour
     {
         this.auserHP.SetActive(true);
         this.auserChaImg.sprite = characterImage;
+    }
+
+    public void SetUHS(Slider slider)
+    {
+        this.uhs = slider;
+    }
+
+    public Slider GetUHS()
+    {
+        return this.uhs;
+    }
+
+    public void SetAUHS(Slider slider)
+    {
+        this.auhs = slider;
+    }
+
+    public Slider GetAUHS()
+    {
+        return this.auhs;
     }
 }

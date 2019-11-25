@@ -37,18 +37,19 @@ public class NetworkMananger : MonoBehaviour
 
         sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         var ep = new IPEndPoint(IPAddress.Parse("211.46.116.181"), 9190);
-        //var ep = new IPEndPoint(IPAddress.Parse("192.168.171.130"), 9190);
+
         sock.Connect(ep);
 
         readThread = new Thread(ReciveToServer);
         readThread.Start();
 
-        //sendThread = new Thread(SendToServer);
-        //sendThread.Start();
+        sendThread = new Thread(SendToServer);
+        sendThread.Start();
 
         postBox = PostBox.GetInstance;
         StartCoroutine(CheckQueue());
     }
+
 
     private void Start()
     {
@@ -68,59 +69,68 @@ public class NetworkMananger : MonoBehaviour
 
     public void SendLoginMessage(string id, string pw)
     {
-        string message = "IDPW" + id + "/" + pw;
+        string message = "IDPW" + id + "/" + pw + '\0';
         byte[] buff = Encoding.UTF8.GetBytes(message);
         sock.Send(buff, SocketFlags.None);
-        //StartCoroutine(ReciveToServer());
     }
 
     public void SendSelectCharacterMessage(string characterID)
     {
-        string message = "SELECTCHARACTER:" + GameManager.instance.GetID() + '/' + characterID;
+        string message = "SELECTCHARACTER:" + GameManager.instance.GetID() + '/' + characterID + '\0';
         SendMessage(message);
-        //StartCoroutine(ReciveToServer());
     }
 
     public void SendMoveRightMessage()
     {
-        string message = "CHARACTERMOVERIGHT" + GameManager.instance.GetID() + '&';
-        SendMessage(message);
+        string message = "CHARACTERMOVERIGHT" + GameManager.instance.GetID() + '\0';
+        //SendMessage(message);
+        PostBox.GetInstance.PushSendData(message);
     }
+
+    int ncount = 0;
 
     public void SendMoveLeftMessage()
     {
-        string message = "CHARACTERMOVELEFT" + GameManager.instance.GetID() + '&';
-        SendMessage(message);
+        ncount++;
+        Debug.Log("Left count(Send) = " + ncount);
+        string message = "CHARACTERMOVELEFT" + GameManager.instance.GetID() + '\0';
+        //SendMessage(message);
+        PostBox.GetInstance.PushSendData(message);
     }
 
     public void SendMoveUpMessage()
     {
-        string message = "CHARACTERMOVEUP" + GameManager.instance.GetID() + '&';
-        SendMessage(message);
+        string message = "CHARACTERMOVEUP" + GameManager.instance.GetID() + '\0';
+        //SendMessage(message);
+        PostBox.GetInstance.PushSendData(message);
     }
 
     public void SendMoveDownMessage()
     {
-        string message = "CHARACTERMOVEDOWN" + GameManager.instance.GetID() + '&';
-        SendMessage(message);
+        string message = "CHARACTERMOVEDOWN" + GameManager.instance.GetID() + '\0';
+        //SendMessage(message);
+        PostBox.GetInstance.PushSendData(message);
     }
 
     public void SendMoveStopMessage()
     {
-        string message = "CHARACTERMOVESTOP" + GameManager.instance.GetID() + '&';
-        SendMessage(message);
+        string message = "CHARACTERMOVESTOP" + GameManager.instance.GetID() + '\0';
+        //SendMessage(message);
+        PostBox.GetInstance.PushSendData(message);
     }
 
     public void SendJumpMessage()
     {
-        string message = "CHARACTERJUMP" + GameManager.instance.GetID();
-        SendMessage(message);
+        string message = "CHARACTERJUMP" + GameManager.instance.GetID() + '\0';
+        //SendMessage(message);
+        PostBox.GetInstance.PushSendData(message);
     }
 
     public void SendAttackMessage()
     {
-        string message = "CHARACTERATTACK" + GameManager.instance.GetID();
-        SendMessage(message);
+        string message = "CHARACTERATTACK" + GameManager.instance.GetID() + '\0';
+        //SendMessage(message);
+        PostBox.GetInstance.PushSendData(message);
     }
 
     public void ResponseData(string data)
@@ -138,21 +148,14 @@ public class NetworkMananger : MonoBehaviour
         while (true)
         {
             string result;
-            byte[] receiverBuff = new byte[8192];
+            byte[] receiverBuff = new byte[1024];
             int n = NetworkMananger.instance.sock.Receive(receiverBuff);
             result = Encoding.UTF8.GetString(receiverBuff, 0, n);
 
-            if (result.Contains("&"))
-            {
-                string[] results = result.Split(new string[] { "&" }, StringSplitOptions.None);
+            Debug.Log(result);
 
-                for (int i = 0; i < results.Length; i++)
-                    Response(results[i]);
-            }
-            else
-            {
-                Response(result);
-            }
+            Response(result);
+
         }
     }
 
@@ -163,6 +166,7 @@ public class NetworkMananger : MonoBehaviour
             string sendData = PostBox.GetInstance.GetSendData();
             if (sendData != string.Empty)
             {
+                Thread.Sleep(50);
                 SendMessage(sendData);
             }
         }
@@ -188,7 +192,7 @@ public class NetworkMananger : MonoBehaviour
         }
     }
 
-    int count = 1;
+    int count = 0;
 
     private void CheckMessage(string message)
     {
@@ -197,41 +201,6 @@ public class NetworkMananger : MonoBehaviour
             message = message.Replace("LOGINSUCESS", ""); // LOGINSUCESS"ID" 부터 LOGINSUCESS를 지워서 ID만 남게 만듬
             Debug.Log("Login Sucess connect id is " + message); // 서버로부터 로그인 성공을 전달 받음
             GameManager.instance.SelectScene(message);
-        }
-        else if (message.Contains("CHARACTERMOVESTOP"))
-        {
-            message = message.Replace("CHARACTERMOVESTOP", "");
-            GameManager.instance.ChracterMove(Vector3.zero, message);
-        }
-        else if (message.Contains("CHARACTERMOVERIGHT"))
-        {
-            message = message.Replace("CHARACTERMOVERIGHT", "");
-            GameManager.instance.ChracterMove(Vector3.right, message);
-        }
-        else if (message.Contains("CHARACTERMOVELEFT"))
-        {
-            message = message.Replace("CHARACTERMOVELEFT", "");
-            GameManager.instance.ChracterMove(Vector3.left, message);
-        }
-        else if (message.Contains("CHARACTERMOVEUP"))
-        {
-            message = message.Replace("CHARACTERMOVEUP", "");
-            GameManager.instance.ChracterMove(Vector3.up, message);
-        }
-        else if (message.Contains("CHARACTERMOVEDOWN"))
-        {
-            message = message.Replace("CHARACTERMOVEDOWN", "");
-            GameManager.instance.ChracterMove(Vector3.down, message);
-        }
-        else if (message.Contains("CHARACTERJUMP"))
-        {
-            string id = message.Replace("CHARACTERJUMP", "");
-            GameManager.instance.CharacterJump(id);
-        }
-        else if (message.Contains("CHARACTERATTACK"))
-        {
-            string id = message.Replace("CHARACTERATTACK", "");
-            GameManager.instance.CharacterAttack(id);
         }
         else if (message.Contains("SELECTCHARACTER"))
         {
@@ -243,11 +212,43 @@ public class NetworkMananger : MonoBehaviour
             Debug.Log("Select charter ID : " + characterID);
             GameManager.instance.LinkWorld(id, characterID);
         }
+        else
+        {
+            if (message.Contains("MOVESTOP"))
+            {
+                GameManager.instance.ChracterMove(Vector3.zero);
+            }
+            else if (message.Contains("MOVERIGHT"))
+            {
+                GameManager.instance.ChracterMove(new Vector3(0.01f, 0, 0));
+            }
+            else if (message.Contains("MOVELEFT"))
+            {
+                count++;
+                Debug.Log("Left count(Recevie) = " + count);
+                GameManager.instance.ChracterMove(new Vector3(-0.01f, 0, 0));
+            }
+            else if (message.Contains("MOVEUP"))
+            {
+                GameManager.instance.ChracterMove(new Vector3(0, 0.01f, 0));
+            }
+            else if (message.Contains("MOVEDOWN"))
+            {
+                GameManager.instance.ChracterMove(new Vector3(0, -0.01f, 0));
+            }
+            else if (message.Contains("ATTACK"))
+            {
+                string id = message.Replace("CHARACTERATTACK", "");
+                GameManager.instance.CharacterAttack(id);
+            }
+        }
+
     }
 
     void OnApplicationQuit()
     {
         Debug.Log("프로그램 종료");
         readThread.Abort();
+        sendThread.Abort();
     }
 }
