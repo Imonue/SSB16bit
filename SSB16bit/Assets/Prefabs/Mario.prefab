@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1166926001313618649}
   - component: {fileID: 904532692599744664}
   - component: {fileID: -6085452294393428433}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Mario
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46,7 +46,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2933673398024548245}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -110,6 +110,7 @@ MonoBehaviour:
   atkDown: {fileID: 8854053895840292973}
   atkRight: {fileID: 8755003926474012435}
   atkLeft: {fileID: 8461909030574958710}
+  hpSlider: {fileID: 0}
 --- !u!212 &1166926001313618649
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -145,8 +146,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 147790579
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 320cda8af6f451f4382bb26c14862d7c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -203,7 +204,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6743252098546318246}
   - component: {fileID: 1408204080709371779}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Up
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -274,7 +275,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3746393231296542597}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Attack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -310,7 +311,7 @@ GameObject:
   - component: {fileID: 5650124154132087383}
   - component: {fileID: 2811577361815460600}
   - component: {fileID: 5857101945723296811}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: HitBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -380,7 +381,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3051843056436117111}
   - component: {fileID: 2997343428428462634}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -445,7 +446,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7635069915310697987}
   - component: {fileID: 4650364615751287895}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -512,7 +513,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5144986533889798798}
   - component: {fileID: 4839626268101801075}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Down
   m_TagString: Untagged
   m_Icon: {fileID: 0}

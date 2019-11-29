@@ -36,7 +36,7 @@ public class NetworkMananger : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        var ep = new IPEndPoint(IPAddress.Parse("211.46.116.181"), 9190);
+        var ep = new IPEndPoint(IPAddress.Parse("211.46.116.181"), 9000);
 
         sock.Connect(ep);
 
@@ -76,7 +76,7 @@ public class NetworkMananger : MonoBehaviour
 
     public void SendSelectCharacterMessage(string characterID)
     {
-        string message = "SELECTCHARACTER:" + GameManager.instance.GetID() + '/' + characterID + '\0';
+        string message = "SELECTCHARACTER:" + GameManager.instance.GetID() + '/' + characterID;
         SendMessage(message);
     }
 
@@ -166,11 +166,12 @@ public class NetworkMananger : MonoBehaviour
             string sendData = PostBox.GetInstance.GetSendData();
             if (sendData != string.Empty)
             {
-                Thread.Sleep(50);
+                Thread.Sleep(30);
                 SendMessage(sendData);
             }
         }
     }
+
 
     //큐를 주기적으로 탐색
     private IEnumerator CheckQueue()
@@ -198,8 +199,17 @@ public class NetworkMananger : MonoBehaviour
     {
         if (message.Contains("LOGINSUCESS"))
         {
-            message = message.Replace("LOGINSUCESS", ""); // LOGINSUCESS"ID" 부터 LOGINSUCESS를 지워서 ID만 남게 만듬
-            Debug.Log("Login Sucess connect id is " + message); // 서버로부터 로그인 성공을 전달 받음
+            if (message.Contains("PLAYER1"))
+            {
+                message = message.Replace("LOGINSUCESSPLAYER1", ""); // LOGINSUCESS"ID" 부터 LOGINSUCESS를 지워서 ID만 남게 만듬
+                GameManager.instance.SetPlayer1();
+            }
+            else if (message.Contains("PLAYER2")) 
+            {
+                message = message.Replace("LOGINSUCESSPLAYER2", ""); // LOGINSUCESS"ID" 부터 LOGINSUCESS를 지워서 ID만 남게 만듬
+                GameManager.instance.SetPlayer2();
+            }
+                Debug.Log("Login Sucess connect id is " + message); // 서버로부터 로그인 성공을 전달 받음
             GameManager.instance.SelectScene(message);
         }
         else if (message.Contains("SELECTCHARACTER"))

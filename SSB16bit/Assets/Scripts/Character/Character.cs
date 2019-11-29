@@ -130,6 +130,11 @@ public class Character : MonoBehaviour
         SetMoveDirection(Mathf.Round(GetMoveDirection().x), Mathf.Round(GetMoveDirection().y), GetMoveDirection().z);
         GetAnimator().SetFloat("DirY", GetMoveDirection().y);
         GetAnimator().SetFloat("DirX", GetMoveDirection().x);
+
+        if(GetRigidbody().velocity == Vector2.zero)
+        {
+            GetAnimator().SetBool("Move", false);
+        }
     }
 
     int count = 0;

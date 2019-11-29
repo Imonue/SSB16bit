@@ -14,12 +14,12 @@ TagManager:
   - UI
   - 
   - 
+  - Map
   - 
   - 
   - 
   - 
-  - 
-  - 
+  - Player
   - 
   - 
   - 
@@ -41,4 +41,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Map
+    uniqueID: 258924299
+    locked: 0
+  - name: Player
+    uniqueID: 147790579
     locked: 0

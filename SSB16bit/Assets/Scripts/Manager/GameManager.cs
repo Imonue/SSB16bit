@@ -5,6 +5,13 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    enum PlayerType
+    {
+        none = 0,
+        player1 = 1,
+        player2 = 2
+    };
+
     public static GameManager instance;
 
     [Header("User infomation")]
@@ -18,6 +25,8 @@ public class GameManager : MonoBehaviour
     [Header("Game Manager Value")]
     [SerializeField]
     private bool gameStart = false;
+    [SerializeField]
+    private PlayerType playerType = PlayerType.none;
     private WaitForSeconds characterCreateTime = new WaitForSeconds(1.0f);
 
 
@@ -87,7 +96,7 @@ public class GameManager : MonoBehaviour
     {
         yield return characterCreateTime;
         Debug.Log("character : " + characterID);
-        int characID = 0 ;
+        int characID = 0;
         if (characterID.Equals("mario"))
         {
             characID = 0;
@@ -100,12 +109,19 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("EEROR!! Check for character Id!!!");
         }
-        this.character = Instantiate(CharacterManager.instance.characters[characID].gameObj, new Vector2(0, 0), Quaternion.identity).GetComponent<Character>();
-        this.character.SetUserID(this.userID);
+        if (this.playerType == PlayerType.player1)
+        {
+            this.character = Instantiate(CharacterManager.instance.characters[characID].gameObj, new Vector2(-1.0f, 0), Quaternion.identity).GetComponent<Character>();
+        }
+        else if(this.playerType == PlayerType.player2)
+        {
+            this.character = Instantiate(CharacterManager.instance.characters[characID].gameObj, new Vector2(1.0f, 0), Quaternion.identity).GetComponent<Character>();
+        }
+            this.character.SetUserID(this.userID);
         this.character.SetUserType(true);
         this.character.SetTag("Player");
         this.character.SetHS(UIManager.instance.GetUHS());
-       // UIManager.instance.SetUser(CharacterManager.instance.characters[characID].hp);
+        UIManager.instance.SetUser(CharacterManager.instance.characters[characID].hp);
     }
 
     IEnumerator AnotherCharcterCreate(string ID, string characterID)
@@ -126,12 +142,29 @@ public class GameManager : MonoBehaviour
             Debug.Log("EEROR!! Check for character Id!!!");
         }
         this.auserID = ID;
-        this.auc = Instantiate(CharacterManager.instance.characters[characID].gameObj, new Vector2(0, 0), Quaternion.identity).GetComponent<Character>();
+        if (this.playerType == PlayerType.player1)
+        {
+            this.auc = Instantiate(CharacterManager.instance.characters[characID].gameObj, new Vector2(1.0f, 0), Quaternion.identity).GetComponent<Character>();
+        }
+        else if (this.playerType == PlayerType.player2)
+        {
+            this.auc = Instantiate(CharacterManager.instance.characters[characID].gameObj, new Vector2(-1.0f, 0), Quaternion.identity).GetComponent<Character>();
+        }
         this.auc.SetUserID(ID);
         this.auc.SetUserType(false);
         this.auc.SetTag("AnotherPlayer");
         this.auc.SetHS(UIManager.instance.GetAUHS());
-       // UIManager.instance.SetAUser(CharacterManager.instance.characters[characID].hp);
+        UIManager.instance.SetAUser(CharacterManager.instance.characters[characID].hp);
+    }
+
+    public void SetPlayer1()
+    {
+        this.playerType = PlayerType.player1;
+    }
+
+    public void SetPlayer2()
+    {
+        this.playerType = PlayerType.player2;
     }
 
     ////////////////////////////// Getter/Setter //////////////////////////////
