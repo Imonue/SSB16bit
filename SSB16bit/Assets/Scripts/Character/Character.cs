@@ -130,11 +130,6 @@ public class Character : MonoBehaviour
         SetMoveDirection(Mathf.Round(GetMoveDirection().x), Mathf.Round(GetMoveDirection().y), GetMoveDirection().z);
         GetAnimator().SetFloat("DirY", GetMoveDirection().y);
         GetAnimator().SetFloat("DirX", GetMoveDirection().x);
-
-        if(GetRigidbody().velocity == Vector2.zero)
-        {
-            GetAnimator().SetBool("Move", false);
-        }
     }
 
     int count = 0;
@@ -150,26 +145,50 @@ public class Character : MonoBehaviour
                 this.SetMoveDirection(Vector3.right);
                 this.GetAnimator().SetBool("Move", true);
             }
-            else if(Input.GetKey(KeyCode.LeftArrow))
+            else if(Input.GetKeyUp(KeyCode.RightArrow))
+            {
+                NetworkMananger.instance.SendMoveStopMessage();
+                this.GetAnimator().SetBool("Move", false);
+            }
+
+            if(Input.GetKey(KeyCode.LeftArrow))
             {
                 NetworkMananger.instance.SendMoveLeftMessage();
                 this.transform.Translate(new Vector3(-0.01f, 0, 0));
                 this.SetMoveDirection(Vector3.left);
                 this.GetAnimator().SetBool("Move", true);
             }
-            else if (Input.GetKey(KeyCode.UpArrow))
+            else if (Input.GetKeyUp(KeyCode.LeftArrow))
+            {
+                NetworkMananger.instance.SendMoveStopMessage();
+                this.GetAnimator().SetBool("Move", false);
+            }
+
+            if (Input.GetKey(KeyCode.UpArrow))
             {
                 NetworkMananger.instance.SendMoveUpMessage();
                 this.transform.Translate(new Vector3(0, 0.01f, 0));
                 this.SetMoveDirection(Vector3.up);
                 this.GetAnimator().SetBool("Move", true);
             }
-            else if (Input.GetKey(KeyCode.DownArrow))
+            else if (Input.GetKeyUp(KeyCode.UpArrow))
+            {
+                NetworkMananger.instance.SendMoveStopMessage();
+                this.GetAnimator().SetBool("Move", false);
+            }
+
+
+            if (Input.GetKey(KeyCode.DownArrow))
             {
                 NetworkMananger.instance.SendMoveDownMessage();
                 this.transform.Translate(new Vector3(0, -0.01f, 0));
                 this.SetMoveDirection(Vector3.down);
                 this.GetAnimator().SetBool("Move", true);
+            }
+            else if (Input.GetKeyUp(KeyCode.DownArrow))
+            {
+                NetworkMananger.instance.SendMoveStopMessage();
+                this.GetAnimator().SetBool("Move", false);
             }
 
             if (Input.GetKeyDown(KeyCode.Z))

@@ -14,13 +14,17 @@ public class GameManager : MonoBehaviour
 
     public static GameManager instance;
 
-    [Header("User infomation")]
+    [Header("User Infomation")]
     [SerializeField]
     private string userID;
+    public Character character;
+    [SerializeField]
+    private int socket;
+
+    [Header("Another User Infomation")]
     [SerializeField]
     private string auserID;
     public Character auc;
-    public Character character;
 
     [Header("Game Manager Value")]
     [SerializeField]
@@ -53,9 +57,10 @@ public class GameManager : MonoBehaviour
         
     }
 
-    public void SelectScene(string ID)
+    public void SelectScene(string id, int socket)
     {
-        this.userID = ID;
+        this.userID = id;
+        this.socket = socket;
         SceneManager.LoadScene("SelectScene");
     }
 
@@ -77,7 +82,8 @@ public class GameManager : MonoBehaviour
     {
         if (direction != Vector3.zero)
         {
-            this.auc.transform.Translate(direction);
+            this.auc.transform.Translate(direction / 100);
+            this.auc.SetDirection(direction);
             this.auc.SetMoveDirection(direction);
             this.auc.GetAnimator().SetBool("Move", true);
         }
@@ -111,11 +117,11 @@ public class GameManager : MonoBehaviour
         }
         if (this.playerType == PlayerType.player1)
         {
-            this.character = Instantiate(CharacterManager.instance.characters[characID].gameObj, new Vector2(-1.0f, 0), Quaternion.identity).GetComponent<Character>();
+            this.character = Instantiate(CharacterManager.instance.characters[characID].gameObj, new Vector2(-0.5f, 0), Quaternion.identity).GetComponent<Character>();
         }
         else if(this.playerType == PlayerType.player2)
         {
-            this.character = Instantiate(CharacterManager.instance.characters[characID].gameObj, new Vector2(1.0f, 0), Quaternion.identity).GetComponent<Character>();
+            this.character = Instantiate(CharacterManager.instance.characters[characID].gameObj, new Vector2(0.5f, 0), Quaternion.identity).GetComponent<Character>();
         }
             this.character.SetUserID(this.userID);
         this.character.SetUserType(true);
@@ -144,11 +150,11 @@ public class GameManager : MonoBehaviour
         this.auserID = ID;
         if (this.playerType == PlayerType.player1)
         {
-            this.auc = Instantiate(CharacterManager.instance.characters[characID].gameObj, new Vector2(1.0f, 0), Quaternion.identity).GetComponent<Character>();
+            this.auc = Instantiate(CharacterManager.instance.characters[characID].gameObj, new Vector2(0.5f, 0), Quaternion.identity).GetComponent<Character>();
         }
         else if (this.playerType == PlayerType.player2)
         {
-            this.auc = Instantiate(CharacterManager.instance.characters[characID].gameObj, new Vector2(-1.0f, 0), Quaternion.identity).GetComponent<Character>();
+            this.auc = Instantiate(CharacterManager.instance.characters[characID].gameObj, new Vector2(-0.5f, 0), Quaternion.identity).GetComponent<Character>();
         }
         this.auc.SetUserID(ID);
         this.auc.SetUserType(false);
@@ -177,5 +183,15 @@ public class GameManager : MonoBehaviour
     public string GetID()
     {
         return this.userID;
+    }
+
+    public void SetSocket(int socket)
+    {
+        this.socket = socket;
+    }
+
+    public int GetSocket()
+    {
+        return this.socket;
     }
 }

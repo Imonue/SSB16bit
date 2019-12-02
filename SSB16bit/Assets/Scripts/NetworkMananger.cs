@@ -76,59 +76,48 @@ public class NetworkMananger : MonoBehaviour
 
     public void SendSelectCharacterMessage(string characterID)
     {
-        string message = "SELECTCHARACTER:" + GameManager.instance.GetID() + '/' + characterID;
+        string message = GameManager.instance.GetSocket() + "^" + "SELECTCHARACTER:" + GameManager.instance.GetID() + '/' + characterID;
         SendMessage(message);
     }
 
     public void SendMoveRightMessage()
     {
-        string message = "CHARACTERMOVERIGHT" + GameManager.instance.GetID() + '\0';
+        string message = GameManager.instance.GetSocket() + "^" + "CHARACTERMOVERIGHT" + GameManager.instance.GetID() + '\0';
         //SendMessage(message);
         PostBox.GetInstance.PushSendData(message);
     }
 
-    int ncount = 0;
-
     public void SendMoveLeftMessage()
     {
-        ncount++;
-        Debug.Log("Left count(Send) = " + ncount);
-        string message = "CHARACTERMOVELEFT" + GameManager.instance.GetID() + '\0';
-        //SendMessage(message);
+        string message = GameManager.instance.GetSocket() + "^" + "CHARACTERMOVELEFT" + GameManager.instance.GetID() + '\0';
+        Debug.Log(message);
         PostBox.GetInstance.PushSendData(message);
     }
 
     public void SendMoveUpMessage()
     {
-        string message = "CHARACTERMOVEUP" + GameManager.instance.GetID() + '\0';
+        string message = GameManager.instance.GetSocket() + "^" + "CHARACTERMOVEUP" + GameManager.instance.GetID() + '\0';
         //SendMessage(message);
         PostBox.GetInstance.PushSendData(message);
     }
 
     public void SendMoveDownMessage()
     {
-        string message = "CHARACTERMOVEDOWN" + GameManager.instance.GetID() + '\0';
+        string message = GameManager.instance.GetSocket() + "^" + "CHARACTERMOVEDOWN" + GameManager.instance.GetID() + '\0';
         //SendMessage(message);
         PostBox.GetInstance.PushSendData(message);
     }
 
     public void SendMoveStopMessage()
     {
-        string message = "CHARACTERMOVESTOP" + GameManager.instance.GetID() + '\0';
-        //SendMessage(message);
-        PostBox.GetInstance.PushSendData(message);
-    }
-
-    public void SendJumpMessage()
-    {
-        string message = "CHARACTERJUMP" + GameManager.instance.GetID() + '\0';
+        string message = GameManager.instance.GetSocket() + "^" + "CHARACTERMOVESTOP" + GameManager.instance.GetID() + '\0';
         //SendMessage(message);
         PostBox.GetInstance.PushSendData(message);
     }
 
     public void SendAttackMessage()
     {
-        string message = "CHARACTERATTACK" + GameManager.instance.GetID() + '\0';
+        string message = GameManager.instance.GetSocket() + "^" + "CHARACTERATTACK" + GameManager.instance.GetID() + '\0';
         //SendMessage(message);
         PostBox.GetInstance.PushSendData(message);
     }
@@ -166,7 +155,7 @@ public class NetworkMananger : MonoBehaviour
             string sendData = PostBox.GetInstance.GetSendData();
             if (sendData != string.Empty)
             {
-                Thread.Sleep(30);
+                Thread.Sleep(50);
                 SendMessage(sendData);
             }
         }
@@ -203,14 +192,22 @@ public class NetworkMananger : MonoBehaviour
             {
                 message = message.Replace("LOGINSUCESSPLAYER1", ""); // LOGINSUCESS"ID" 부터 LOGINSUCESS를 지워서 ID만 남게 만듬
                 GameManager.instance.SetPlayer1();
+                string[] result = message.Split(new char[] { '/' });
+                int socket = Int32.Parse(result[0]);
+                string id = result[1];
+                Debug.Log("Login Sucess connect id is " + message + " socket = " + socket); // 서버로부터 로그인 성공을 전달 받음
+                GameManager.instance.SelectScene(id, socket);
             }
             else if (message.Contains("PLAYER2")) 
             {
                 message = message.Replace("LOGINSUCESSPLAYER2", ""); // LOGINSUCESS"ID" 부터 LOGINSUCESS를 지워서 ID만 남게 만듬
                 GameManager.instance.SetPlayer2();
+                string[] result = message.Split(new char[] { '/' });
+                int socket = Int32.Parse(result[0]);
+                string id = result[1];
+                Debug.Log("Login Sucess connect id is " + message + " socket = " + socket); // 서버로부터 로그인 성공을 전달 받음
+                GameManager.instance.SelectScene(id, socket);
             }
-                Debug.Log("Login Sucess connect id is " + message); // 서버로부터 로그인 성공을 전달 받음
-            GameManager.instance.SelectScene(message);
         }
         else if (message.Contains("SELECTCHARACTER"))
         {
@@ -230,21 +227,21 @@ public class NetworkMananger : MonoBehaviour
             }
             else if (message.Contains("MOVERIGHT"))
             {
-                GameManager.instance.ChracterMove(new Vector3(0.01f, 0, 0));
+                GameManager.instance.ChracterMove(Vector3.right);
             }
             else if (message.Contains("MOVELEFT"))
             {
                 count++;
                 Debug.Log("Left count(Recevie) = " + count);
-                GameManager.instance.ChracterMove(new Vector3(-0.01f, 0, 0));
+                GameManager.instance.ChracterMove(Vector3.left);
             }
             else if (message.Contains("MOVEUP"))
             {
-                GameManager.instance.ChracterMove(new Vector3(0, 0.01f, 0));
+                GameManager.instance.ChracterMove(Vector3.up);
             }
             else if (message.Contains("MOVEDOWN"))
             {
-                GameManager.instance.ChracterMove(new Vector3(0, -0.01f, 0));
+                GameManager.instance.ChracterMove(Vector3.down);
             }
             else if (message.Contains("ATTACK"))
             {
