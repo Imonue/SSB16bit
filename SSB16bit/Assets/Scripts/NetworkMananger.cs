@@ -36,7 +36,7 @@ public class NetworkMananger : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        var ep = new IPEndPoint(IPAddress.Parse("211.46.116.181"), 9000);
+        var ep = new IPEndPoint(IPAddress.Parse("211.46.116.181"), 9190);
 
         sock.Connect(ep);
 
